@@ -20,6 +20,7 @@ dim(lon)
 lat <- ncvar_get(ncin,"lat")
 dim(lat)
 tmp.array <- ncvar_get(ncin,"tasmax")
+tmp.array <- tmp.array -273.15
 dim(tmp.array)
 dunits <- ncatt_get(ncin,"tasmax","units")
 dunits

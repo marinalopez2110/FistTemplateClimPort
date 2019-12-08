@@ -27,7 +27,7 @@ dunits
 tunits <- ncatt_get(ncin,"time","units")
 tunits
 nc_close(ncin)
-tmp.slice <- tmp.array[,,1]
+tmp.slice <- tmp.array[,,168] #CHANGE LAST DIGIT TO SELECT THE DAY (ex.1 for jan, 168 for june)
 
 image(lon,lat,tmp.slice)
 
@@ -67,3 +67,4 @@ mapCDFtemp <- function(lat,lon,tas) #model and perc should be a string
   
 }
 mapCDFtemp(lat,lon,tmp.slice)
+

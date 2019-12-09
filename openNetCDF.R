@@ -40,26 +40,26 @@ str(TempMax)
 TIME <- as.POSIXct(substr(TempMax@data@names, start = 2, stop=20), format="%Y.%m.%d")
 df <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
 
-###Create a subset of only the fist day of the month
-subset <- df[format(df$TIME, "%d") == "01",]
+###Create a subset of only the fist month of the year
+subset <- df[format(df$TIME, "%m") == "01",]
 
 sub.temp <- TempMax[[subset$INDEX]]
 
-temp_day1 <- calc(sub.temp, fun=mean)
-plot(temp_day1)
+temp_month1 <- calc(sub.temp, fun=mean)
+plot(temp_month1)
 
 
 nc_close(ncin)
 
 ###########CREATING A PLOT MAP FROM A SLICE OF DATA (ONE DAY)
-tmp.slice <- tmp.array[,,168] #CHANGE LAST DIGIT TO SELECT THE DAY (ex.1 for jan, 168 for june)
+tmp.slice <- tmp.array[,,1] #CHANGE LAST DIGIT TO SELECT THE DAY (ex.1 for jan, 168 for june)
 
 image(lon,lat,tmp.slice)
 
 mapCDFtemp <- function(lat,lon,tas) #model and perc should be a string
   
 {
-  titletext <- "title"
+  titletext <- "Température Max Quebec"
   expand.grid(lon, lat) %>%
     rename(lon = Var1, lat = Var2) %>%
     mutate(lon = ifelse(lon > 180, -(360 - lon), lon),
@@ -69,11 +69,12 @@ mapCDFtemp <- function(lat,lon,tas) #model and perc should be a string
     geom_point(aes(x = lon, y = lat, color = tas),
                size = 0.8) +
     borders("world", colour="black", fill=NA) + 
-    scale_color_viridis(na.value="white",name = "Temperature") + 
+    scale_color_viridis(na.value="white",name = "Température") + 
     theme(legend.direction="vertical", legend.position="right", legend.key.width=unit(0.4,"cm"), legend.key.heigh=unit(2,"cm")) + 
     coord_quickmap() + 
     ggtitle(titletext) 
 }
 
+par(mfrow=c(1,2))
 mapCDFtemp(lat,lon,tmp.slice)
 

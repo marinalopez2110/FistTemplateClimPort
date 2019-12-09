@@ -11,6 +11,8 @@ library(lattice)
 library(ncdf4)
 library(maps)
 library(raster)
+library(PCICt)
+library(ncdf4.tools)
 
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
 
@@ -19,8 +21,10 @@ ncin <- nc_open(fname)
 print(ncin)
 lon <- ncvar_get(ncin,"lon")
 dim(lon)
+summary(lon)
 lat <- ncvar_get(ncin,"lat")
 dim(lat)
+summary (lat)
 tmp.array <- ncvar_get(ncin,"tasmax")
 tmp.array <- tmp.array -273.15 ###Convert into Celsius
 dim(tmp.array)
@@ -28,6 +32,8 @@ dunits <- ncatt_get(ncin,"tasmax","units")
 dunits
 tunits <- ncatt_get(ncin,"time","units")
 tunits
+ncin$dim$time$units
+ncin$dim$time$calendar
 
 ###Convert into raster
 rasbrick <- brick(fname)
@@ -48,7 +54,6 @@ sub.temp <- TempMax[[subset$INDEX]]
 temp_month1 <- calc(sub.temp, fun=mean)
 plot(temp_month1)
 
-
 nc_close(ncin)
 
 ###########CREATING A PLOT MAP FROM A SLICE OF DATA (ONE DAY)
@@ -59,7 +64,7 @@ image(lon,lat,tmp.slice)
 mapCDFtemp <- function(lat,lon,tas) #model and perc should be a string
   
 {
-  titletext <- "Température Max Quebec"
+  titletext <- "Température Max Québec"
   expand.grid(lon, lat) %>%
     rename(lon = Var1, lat = Var2) %>%
     mutate(lon = ifelse(lon > 180, -(360 - lon), lon),

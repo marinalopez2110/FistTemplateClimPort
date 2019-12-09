@@ -25,9 +25,9 @@ summary(lon)
 lat <- ncvar_get(ncin,"lat")
 nlat <- dim(lat)
 summary (lat)
-tmp.array <- ncvar_get(ncin,"tasmax")
-tmp.array <- tmp.array -273.15 ###Convert into Celsius
-dim(tmp.array)
+tmp.array.day <- ncvar_get(ncin,"tasmax")
+tmp.array.day <- tmp.array -273.15 ###Convert into Celsius
+dim(tmp.array.day)
 dunits <- ncatt_get(ncin,"tasmax","units")
 dunits
 tunits <- ncatt_get(ncin,"time","units")
@@ -43,26 +43,26 @@ ncin$dim$time$calendar
 rasbrick <- brick(fname)
 rasbrick
 
-TempMax <- brick(fname, vaname="tasmax", layer="time")
+TempMax <- brick(fname, varname="tasmax", layer="time")
 str(TempMax)
 
 ###Create a time index for the multi-layer objetct
 TIME <- as.POSIXct(substr(TempMax@data@names, start = 2, stop=20), format="%Y.%m.%d")
-df <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
+dftime <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
 
 ###Create a subset of only the fist month of the year
-subset <- df[format(df$TIME, "%m") == "01",]
+subset <- dftime[format(dftime$TIME, "%m") == "01",]
 
 sub.temp <- TempMax[[subset$INDEX]]
 
-temp_month1 <- calc(sub.temp, fun=mean)
+temp_month1 <- calc(sub.temp, fun=mean) #mean temperature of the month
 plot(temp_month1)
 
 nc_close(ncin)
 
 ###########CREATING A PLOT MAP FROM A SLICE OF DATA (ONE DAY)
-m <- 1
-tmp.slice <- tmp.array[,,m] #CHANGE LAST DIGIT TO SELECT THE DAY (ex.1 for jan, 168 for june)
+m <- 1 #select day
+tmp.slice <- tmp.array.day[,,m] #CHANGE LAST DIGIT TO SELECT THE DAY (ex.1 for jan, 168 for june)
 
 image(lon,lat,tmp.slice)
 

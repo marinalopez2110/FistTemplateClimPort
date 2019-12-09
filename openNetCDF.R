@@ -20,10 +20,10 @@ fname <- "tasmax_day_BNU-ESM_rcp45_r1i1p1_na10kgrid_qm-moving-50bins-detrend_195
 ncin <- nc_open(fname)
 print(ncin)
 lon <- ncvar_get(ncin,"lon")
-dim(lon)
+nlon <- dim(lon)
 summary(lon)
 lat <- ncvar_get(ncin,"lat")
-dim(lat)
+nlat <- dim(lat)
 summary (lat)
 tmp.array <- ncvar_get(ncin,"tasmax")
 tmp.array <- tmp.array -273.15 ###Convert into Celsius
@@ -32,6 +32,10 @@ dunits <- ncatt_get(ncin,"tasmax","units")
 dunits
 tunits <- ncatt_get(ncin,"time","units")
 tunits
+time <- ncvar_get(ncin,"time")
+time
+nt <- dim(time)
+nt
 ncin$dim$time$units
 ncin$dim$time$calendar
 
@@ -57,7 +61,8 @@ plot(temp_month1)
 nc_close(ncin)
 
 ###########CREATING A PLOT MAP FROM A SLICE OF DATA (ONE DAY)
-tmp.slice <- tmp.array[,,1] #CHANGE LAST DIGIT TO SELECT THE DAY (ex.1 for jan, 168 for june)
+m <- 1
+tmp.slice <- tmp.array[,,m] #CHANGE LAST DIGIT TO SELECT THE DAY (ex.1 for jan, 168 for june)
 
 image(lon,lat,tmp.slice)
 
@@ -83,3 +88,49 @@ mapCDFtemp <- function(lat,lon,tas) #model and perc should be a string
 par(mfrow=c(1,2))
 mapCDFtemp(lat,lon,tmp.slice)
 
+# create dataframe -- reshape data
+# matrix (nlon*nlat rows by 2 cols) of lons and lats
+lonlat <- as.matrix(expand.grid(lon,lat))
+dim(lonlat)
+
+# vector of `tmp` values
+tmp_vec <- as.vector(tmp.slice)
+length(tmp_vec)
+
+# create dataframe and add names
+dname <- "tasmax"  # note: tmp means temperature (not temporary)
+tmp_df01 <- data.frame(cbind(lonlat,tmp_vec))
+names(tmp_df01) <- c("lon","lat",paste(dname,as.character(m), sep="_"))
+head(na.omit(tmp_df01), 10)
+
+# reshape the array into vector
+tmp_array <- ncvar_get(ncin,dname)
+tmp_vec_long <- as.vector(tmp_array)
+length(tmp_vec_long)
+
+# reshape the vector into a matrix
+tmp_mat <- matrix(tmp_vec_long, nrow=nlon*nlat, ncol=nt)
+dim(tmp_mat)
+
+head(na.omit(tmp_mat))
+
+# create a dataframe
+lonlat <- as.matrix(expand.grid(lon,lat))
+tmp_df02 <- data.frame(cbind(lonlat,tmp_mat))
+names(tmp_df02) <- c("lon","lat","tmpJan01","tmpJan02","tmpMar","tmpApr","tmpMay","tmpJun",
+                     "tmpJul","tmpAug","tmpSep","tmpOct","tmpNov","tmpDec")
+# options(width=96)
+head(na.omit(tmp_df02, 20))
+
+# get the annual mean and MTWA and MTCO
+tmp_df02$mtwa <- apply(tmp_df02[3:367],1,max) # mtwa
+tmp_df02$mtco <- apply(tmp_df02[3:367],1,min) # mtco
+tmp_df02$mat <- apply(tmp_df02[3:367],1,mean) # annual (i.e. row) means
+head(na.omit(tmp_df02))
+
+dim(na.omit(tmp_df02))
+
+
+# create a dataframe without missing values
+tmp_df03 <- na.omit(tmp_df02)
+head(tmp_df03)

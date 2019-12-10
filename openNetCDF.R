@@ -17,8 +17,10 @@ library(ncdf4.tools)
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
 
 fname <- "tasmax_day_BNU-ESM_rcp45_r1i1p1_na10kgrid_qm-moving-50bins-detrend_1956.nc"
-ncin <- nc_open(fname)
+ncin <- nc_open(fname) #open netcdf file
 print(ncin)
+
+####Exploring and creating varibales
 lon <- ncvar_get(ncin,"lon")
 nlon <- dim(lon)
 summary(lon)
@@ -56,11 +58,12 @@ subset <- dftime[format(dftime$TIME, "%m") == "01",]
 sub.temp <- TempMax[[subset$INDEX]]
 
 temp_month1 <- calc(sub.temp, fun=mean) #mean temperature of the month
-plot(temp_month1 - 273.15) #plot in Celsius
+plot(temp_month1 - 273.15) #plot in Celsius for ONE MONTH
 
-nc_close(ncin)
+nc_close(ncin) # Close netcdf file
 
-###########CREATING A PLOT MAP FROM A SLICE OF DATA (ONE DAY)
+########### STARTING TEMPORARY CODE ##########################################
+###CREATING A PLOT MAP FROM A SLICE OF DATA (ONE DAY) - this code may not be needed
 m <- 1 #select day
 tmp.slice <- tmp.array.day[,,m] #CHANGE LAST DIGIT TO SELECT THE DAY (ex.1 for jan, 168 for june)
 
@@ -87,6 +90,10 @@ mapCDFtemp <- function(lat,lon,tas) #model and perc should be a string
 
 par(mfrow=c(1,2))
 mapCDFtemp(lat,lon,tmp.slice)
+
+###################FINISH TEMPORARY CODE ###########################
+
+######## STARTS CODE FOR THE TIME SERIES PLOT##########
 
 # create dataframe -- reshape data
 # matrix (nlon*nlat rows by 2 cols) of lons and lats
@@ -129,6 +136,8 @@ MeanTemDayQuebec = colMeans(ValidValuesTemp) - 273.15
 MeanTemDayQuebec
 
 plot (MeanTemDayQuebec[3:367])
+
+####### FINISH CODE FOR TIME SERIES ############################
 
 
 

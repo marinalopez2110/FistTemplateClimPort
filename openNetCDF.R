@@ -130,18 +130,5 @@ MeanTemDayQuebec
 
 plot (MeanTemDayQuebec[3:367])
 
-# options(width=96)
-head(na.omit(MeanTemDayQuebec, 20))
-
-# get the annual mean and MTWA and MTCO
-tmp_df02$mtwa <- apply(tmp_df02[3:367],1,max) # mtwa
-tmp_df02$mtco <- apply(tmp_df02[3:367],1,min) # mtco
-tmp_df02$mat <- apply(tmp_df02[3:367],1,mean) # annual (i.e. row) means
-head(na.omit(tmp_df02))
-
-dim(na.omit(tmp_df02))
 
 
-# create a dataframe without missing values
-tmp_df03 <- na.omit(tmp_df02)
-head(tmp_df03)

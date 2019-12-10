@@ -56,7 +56,7 @@ subset <- dftime[format(dftime$TIME, "%m") == "01",]
 sub.temp <- TempMax[[subset$INDEX]]
 
 temp_month1 <- calc(sub.temp, fun=mean) #mean temperature of the month
-plot(temp_month1)
+plot(temp_month1 - 273.15) #plot in Celsius
 
 nc_close(ncin)
 
@@ -117,10 +117,21 @@ head(na.omit(tmp_mat))
 # create a dataframe
 lonlat <- as.matrix(expand.grid(lon,lat))
 tmp_df02 <- data.frame(cbind(lonlat,tmp_mat))
-names(tmp_df02) <- c("lon","lat","tmpJan01","tmpJan02","tmpMar","tmpApr","tmpMay","tmpJun",
+names(tmp_df02) <- c("lon","lat","tmpJan01","tmpJan02","tmpJan03","tmpJan04","tmpMay","tmpJun",
                      "tmpJul","tmpAug","tmpSep","tmpOct","tmpNov","tmpDec")
-# options(width=96)
+# Omit Invalid Values
 head(na.omit(tmp_df02, 20))
+ValidValuesTemp = na.omit(tmp_df02)
+ValidValuesTemp
+
+#get the mean of every column for ValidValuesTemp, so we have the mean temperature of every day in all locations
+MeanTemDayQuebec = colMeans(ValidValuesTemp) - 273.15
+MeanTemDayQuebec
+
+plot (MeanTemDayQuebec[3:367])
+
+# options(width=96)
+head(na.omit(MeanTemDayQuebec, 20))
 
 # get the annual mean and MTWA and MTCO
 tmp_df02$mtwa <- apply(tmp_df02[3:367],1,max) # mtwa

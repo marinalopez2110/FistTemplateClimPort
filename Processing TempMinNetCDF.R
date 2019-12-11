@@ -12,11 +12,11 @@ library(ncdf4)
 library(maps)
 library(raster)
 library(PCICt)
-library(ncdf4.tools)
+library(ncdf.tools)
 
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
 
-fname <- "tasmax_day_BNU-ESM_rcp45_r1i1p1_na10kgrid_qm-moving-50bins-detrend_1956.nc"
+fname <- "tasmin_day_CMCC-CMS_rcp45_r1i1p1_na10kgrid_qm-moving-50bins-detrend_1954.nc"
 ncin <- nc_open(fname) #open netcdf file
 print(ncin)
 

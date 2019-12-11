@@ -32,7 +32,7 @@ lat <- ncvar_get(ncin,"lat")
 nlat <- dim(lat)
 summary (lat)
 
-#Exploring temperature and time variables
+#Exploring Relevant variable (temp, prec) and time variables
 dunits <- ncatt_get(ncin, RelVar,"units")
 dunits
 tunits <- ncatt_get(ncin,"time","units")
@@ -60,40 +60,40 @@ dftime <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
 
 ###Create a subset of only the fist month of the year
 subset <- dftime[format(dftime$TIME, "%m") == "01",]
-sub.temp <- PlotVar[[subset$INDEX]]
-temp_month1 <- calc(sub.temp, fun=mean) #mean temperature of the month
-plot(temp_month1 - 273.15) #plot in Celsius for ONE MONTH
+sub.var <- PlotVar[[subset$INDEX]]
+var_vec_long <- calc(sub.var, fun=mean) #mean variable(temp, prec) of the month
+plot(var_vec_long - 273.15) #plot in Celsius for ONE MONTH
 
 ####### FINISHES PLOT MAP PER MONTH########
 
 
 ######## STARTS CODE FOR THE TIME SERIES PLOT##########
 # reshape the array into vector
-tmp_array <- ncvar_get(ncin,RelVar)
-tmp_vec_long <- as.vector(tmp_array)
-length(tmp_vec_long)
+var_array <- ncvar_get(ncin,RelVar)
+var_vec_long <- as.vector(var_array)
+length(var_vec_long)
 
 # reshape the vector into a matrix
-tmp_mat <- matrix(tmp_vec_long, nrow=nlon*nlat, ncol=nt)
-dim(tmp_mat)
+var_mat <- matrix(var_vec_long, nrow=nlon*nlat, ncol=nt)
+dim(var_mat)
 
-head(na.omit(tmp_mat))
+head(na.omit(var_mat))
 
 # create a dataframe
 lonlat <- as.matrix(expand.grid(lon,lat))
-tmp_df02 <- data.frame(cbind(lonlat,tmp_mat))
-names(tmp_df02) <- c("lon","lat","tmpJan01","tmpJan02","tmpJan03","tmpJan04","tmpJan05","tmpJan06",
-                     "tmpJan07","tmpJan08","tmpJan09","tmpJan10","tmpJan11","tmpJan12")
+var_df02 <- data.frame(cbind(lonlat,var_mat))
+names(var_df02) <- c("lon","lat","Jan01","Jan02","Jan03","Jan04","Jan05","Jan06",
+                     "Jan07","Jan08","Jan09","Jan10","Jan11","Jan12")
 # Omit Invalid Values
-head(na.omit(tmp_df02))
-ValidValuesTemp = na.omit(tmp_df02)
-ValidValuesTemp
+head(na.omit(var_df02))
+ValidValuesVar = na.omit(var_df02)
+ValidValuesVar
 
-#get the mean of every column for ValidValuesTemp, so we have the mean temperature of every day in all locations
-MeanTemDayQuebec = colMeans(ValidValuesTemp) - 273.15
-MeanTemDayQuebec
+#get the mean of every column for ValidValuesVar, so we have the mean variable of every day in all locations
+MeanVarDayQuebec = colMeans(ValidValuesVar) - 273.15
+MeanVarDayQuebec
 
-plot (MeanTemDayQuebec[3:367])
+plot (MeanVarDayQuebec[3:367])
 ####### FINISHES CODE FOR TIME SERIES ############################
 
 nc_close(ncin) # Close netcdf file

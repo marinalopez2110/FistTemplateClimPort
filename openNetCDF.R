@@ -27,9 +27,8 @@ summary(lon)
 lat <- ncvar_get(ncin,"lat")
 nlat <- dim(lat)
 summary (lat)
-tmp.array.day <- ncvar_get(ncin,"tasmax")
-tmp.array.day <- tmp.array -273.15 ###Convert into Celsius
-dim(tmp.array.day)
+
+#Exploring temperature and time variables
 dunits <- ncatt_get(ncin,"tasmax","units")
 dunits
 tunits <- ncatt_get(ncin,"time","units")
@@ -41,28 +40,12 @@ nt
 ncin$dim$time$units
 ncin$dim$time$calendar
 
-###Convert into raster
-rasbrick <- brick(fname)
-rasbrick
+########### STARTING TEMPORARY CODE - PLOT PER DAY ##########################################
+##Creating temperature array to create the map plot per day
+tmp.array.day <- ncvar_get(ncin,"tasmax")
+tmp.array.day <- tmp.array -273.15 ###Convert into Celsius
+dim(tmp.array.day)
 
-TempMax <- brick(fname, varname="tasmax", layer="time")
-str(TempMax)
-
-###Create a time index for the multi-layer objetct
-TIME <- as.POSIXct(substr(TempMax@data@names, start = 2, stop=20), format="%Y.%m.%d")
-dftime <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
-
-###Create a subset of only the fist month of the year
-subset <- dftime[format(dftime$TIME, "%m") == "01",]
-
-sub.temp <- TempMax[[subset$INDEX]]
-
-temp_month1 <- calc(sub.temp, fun=mean) #mean temperature of the month
-plot(temp_month1 - 273.15) #plot in Celsius for ONE MONTH
-
-nc_close(ncin) # Close netcdf file
-
-########### STARTING TEMPORARY CODE ##########################################
 ###CREATING A PLOT MAP FROM A SLICE OF DATA (ONE DAY) - this code may not be needed
 m <- 1 #select day
 tmp.slice <- tmp.array.day[,,m] #CHANGE LAST DIGIT TO SELECT THE DAY (ex.1 for jan, 168 for june)
@@ -92,6 +75,30 @@ par(mfrow=c(1,2))
 mapCDFtemp(lat,lon,tmp.slice)
 
 ###################FINISH TEMPORARY CODE ###########################
+
+
+###Convert into raster
+rasbrick <- brick(fname)
+rasbrick
+
+TempMax <- brick(fname, varname="tasmax", layer="time")
+str(TempMax)
+
+###Create a time index for the multi-layer objetct
+TIME <- as.POSIXct(substr(TempMax@data@names, start = 2, stop=20), format="%Y.%m.%d")
+dftime <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
+
+###Create a subset of only the fist month of the year
+subset <- dftime[format(dftime$TIME, "%m") == "01",]
+
+sub.temp <- TempMax[[subset$INDEX]]
+
+temp_month1 <- calc(sub.temp, fun=mean) #mean temperature of the month
+plot(temp_month1 - 273.15) #plot in Celsius for ONE MONTH
+
+nc_close(ncin) # Close netcdf file
+
+
 
 ######## STARTS CODE FOR THE TIME SERIES PLOT##########
 

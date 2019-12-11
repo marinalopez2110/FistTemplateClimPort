@@ -27,10 +27,10 @@ summary(lon)
 lat <- ncvar_get(ncin,"lat")
 nlat <- dim(lat)
 summary (lat)
-tmp.array.day <- ncvar_get(ncin,"tasmax")
+tmp.array.day <- ncvar_get(ncin,"tasmin")
 tmp.array.day <- tmp.array -273.15 ###Convert into Celsius
 dim(tmp.array.day)
-dunits <- ncatt_get(ncin,"tasmax","units")
+dunits <- ncatt_get(ncin,"tasmin","units")
 dunits
 tunits <- ncatt_get(ncin,"time","units")
 tunits
@@ -45,7 +45,7 @@ ncin$dim$time$calendar
 rasbrick <- brick(fname)
 rasbrick
 
-TempMax <- brick(fname, varname="tasmax", layer="time")
+TempMax <- brick(fname, varname="tasmin", layer="time")
 str(TempMax)
 
 ###Create a time index for the multi-layer objetct
@@ -105,7 +105,7 @@ tmp_vec <- as.vector(tmp.slice)
 length(tmp_vec)
 
 # create dataframe and add names
-dname <- "tasmax"  # note: tmp means temperature (not temporary)
+dname <- "tasmin"  # note: tmp means temperature (not temporary)
 tmp_df01 <- data.frame(cbind(lonlat,tmp_vec))
 names(tmp_df01) <- c("lon","lat",paste(dname,as.character(m), sep="_"))
 head(na.omit(tmp_df01), 10)

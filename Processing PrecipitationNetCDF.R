@@ -61,8 +61,8 @@ dftime <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
 ###Create a subset of only the fist month of the year
 subset <- dftime[format(dftime$TIME, "%m") == "01",]
 sub.var <- PlotVar[[subset$INDEX]]
-var_vec_long <- calc(sub.var, fun=mean) #mean variable(temp, prec) of the month
-plot(var_vec_long) #plot in Celsius for ONE MONTH
+var_vec_long <- calc(sub.var, fun=sum) #mean variable(temp, prec) of the month
+plot(var_vec_long) #plot in mm/day for ONE MONTH
 
 ####### FINISHES PLOT MAP PER MONTH########
 
@@ -90,10 +90,14 @@ ValidValuesVar = na.omit(var_df02)
 ValidValuesVar
 
 #get the mean of every column for ValidValuesVar, so we have the mean variable of every day in all locations
-MeanVarDayQuebec = colMeans(ValidValuesVar)
-MeanVarDayQuebec
+SumVarDayQuebec = colSums(ValidValuesVar)
+SumVarDayQuebec
 
-plot (MeanVarDayQuebec[3:367])
+plot (SumVarDayQuebec[3:367])
+VecPrecDay <- as.vector(SumVarDayQuebec[3:367])
+VecPrecDay
+TotalPrecMonth <- sum(VecPrecDay, na.rm = FALSE)
+TotalPrecMonth
 ####### FINISHES CODE FOR TIME SERIES ############################
 
 nc_close(ncin) # Close netcdf file

@@ -22,7 +22,7 @@ shinyServer (
                                    choices=c("Janvier", "Février", "Mars", "Avril","Mai","Juin",
                                              "Julliet","Aout","Septembre","Octobre","Novembre","Decembre")),
                        ),
-      numericInput("n", "n", 50),
+      numericInput("n", "n", 1),
       selectInput("Scenario", "Séléctionez le scenario d'émissions:",
                   choices=c("Modérées (RCP4.5)", "Élevées" )),
       selectInput("Horizon", "Séléctionez l'horizon de temps:",
@@ -33,7 +33,7 @@ shinyServer (
     ),
     
     mainPanel(
-  plotOutput("plot")
+      imageOutput("myImage")
     )
     
   )

@@ -62,10 +62,11 @@ TIME <- as.POSIXct(substr(PlotVar@data@names, start = 2, stop=20), format="%Y.%m
 dftime <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
 
 ###Create a subset of only the fist month of the year
-subset <- dftime[format(dftime$TIME, "%m") == "01",]
+subset <- dftime[format(dftime$TIME, "%m") == alist("01","02","03"),] #Selecting 3 months
+subset
 sub.var <- PlotVar[[subset$INDEX]]
 var_vec_long <- calc(sub.var, fun=mean) #mean variable(temp, prec) of the month
-plot(var_vec_long - 273.15) #plot in Celsius for ONE MONTH
+plot(var_vec_long - 273.15) #plot in Celsius for THREE MONTH
 
 ####### FINISHES PLOT MAP PER MONTH########
 

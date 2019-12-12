@@ -1,3 +1,5 @@
+#Original Code. It has been cleaned up and adapted for Temperature and Precipitation
+
 library(readr)
 library(dplyr)
 library(tidyr)

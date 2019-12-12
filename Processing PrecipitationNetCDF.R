@@ -1,3 +1,4 @@
+####PRECIPITATION ANALYSIS FILE 
 library(readr)
 library(dplyr)
 library(tidyr)
@@ -16,7 +17,7 @@ library(ncdf.tools)
 
 ###Declaring filanmes and variables to explore####
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
-fname <- "pr_day_ACCESS1-3_rcp45_r1i1p1_na10kgrid_qm-moving-50bins-detrend_1951.nc"
+fname <- "pr_day_BNU-ESM_rcp85_r1i1p1_na10kgrid_qm-moving-50bins-detrend_1950.nc"
 RelVar <- "pr" #Relevant variable
 
 ncin <- nc_open(fname) #open netcdf file

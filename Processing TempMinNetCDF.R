@@ -52,7 +52,8 @@ ncin$dim$time$calendar
 rasbrick <- brick(fname)
 rasbrick
 PlotVar <- brick(fname, varname=RelVar, layer="time")
-str(PlotVar)
+strPlotvar <- str(PlotVar)
+
 
 ###Create a time index for the multi-layer objetct
 TIME <- as.POSIXct(substr(PlotVar@data@names, start = 2, stop=20), format="%Y.%m.%d")

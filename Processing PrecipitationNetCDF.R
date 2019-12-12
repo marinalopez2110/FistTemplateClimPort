@@ -54,16 +54,21 @@ PlotVar <- brick(fname, varname=RelVar, layer="time")
 str(PlotVar)
 
 ###Create a time index for the multi-layer objetct
-TIME <- as.POSIXct(substr(PlotVar@data@names), format="%Y.%m.%d")
+TIME <- as.POSIXct(substr(PlotVar@data@names, start = 2, stop=15), format="%Y.%m.%d") #replaces string by date
 dftime <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
 dftime
 
 ###Create a subset of only the fist month of the year
-subset <- dftime[format(dftime$TIME, "%m") == "01",]
+subset <- dftime[format(dftime$TIME, "%m") == "01",] #selecting only one month
 subset
 sub.var <- PlotVar[[subset$INDEX]]
-var_vec_long <- calc(sub.var, fun=sum) #Sum of precipitation of the month
-plot(var_vec_long) #plot in mm/day for ONE MONTH
+var_vec_long <- calc(sub.var, fun=sum) #Sum of precipitation of the month fro the raster
+plot(var_vec_long) #plot the total mm? for ONE MONTH
+var_vec_long #gives minimum and maximum values
+
+#Sums the total precipitation of the month to compare with TotalPrecMonth2
+TotalPrecMonth1 <- cellStats(var_vec_long, stat='sum', na.rm=TRUE,)
+TotalPrecMonth1
 
 ####### FINISHES PLOT MAP PER MONTH########
 
@@ -95,10 +100,13 @@ SumVarDayQuebec = colSums(ValidValuesVar)
 SumVarDayQuebec
 
 plot (SumVarDayQuebec[3:367])
-VecPrecDay <- as.vector(SumVarDayQuebec[3:33])
+
+#SUM of precipitation for a month to compare and verify with ToTalPrecMonth1
+VecPrecDay <- as.vector(SumVarDayQuebec[3:33]) #Selecting days of the first month
 VecPrecDay
-TotalPrecMonth <- sum(VecPrecDay, na.rm = FALSE)
-TotalPrecMonth
+TotalPrecMonth2 <- sum(VecPrecDay, na.rm = FALSE)
+TotalPrecMonth2 #Total precipitation of the month
+
 ####### FINISHES CODE FOR TIME SERIES ############################
 
 nc_close(ncin) # Close netcdf file

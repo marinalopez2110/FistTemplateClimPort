@@ -24,7 +24,7 @@ print(ncin)
 
 
 ######Starts Exploring and creating varibales#####
-### Longitude and Latitude varibales and dimenssions
+### Longitude and Latitude varibales and dimensions
 lon <- ncvar_get(ncin,"lon")
 nlon <- dim(lon)
 summary(lon)
@@ -46,7 +46,6 @@ ncin$dim$time$calendar
 ####Finishes Exploring and creating varibales#####
 
 
-
 ####### STARTS PLOT MAP PER MONTH########
 ###Convert into raster
 rasbrick <- brick(fname)
@@ -55,13 +54,15 @@ PlotVar <- brick(fname, varname=RelVar, layer="time")
 str(PlotVar)
 
 ###Create a time index for the multi-layer objetct
-TIME <- as.POSIXct(substr(PlotVar@data@names, start = 2, stop=20), format="%Y.%m.%d")
+TIME <- as.POSIXct(substr(PlotVar@data@names), format="%Y.%m.%d")
 dftime <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
+dftime
 
 ###Create a subset of only the fist month of the year
 subset <- dftime[format(dftime$TIME, "%m") == "01",]
+subset
 sub.var <- PlotVar[[subset$INDEX]]
-var_vec_long <- calc(sub.var, fun=sum) #mean variable(temp, prec) of the month
+var_vec_long <- calc(sub.var, fun=sum) #Sum of precipitation of the month
 plot(var_vec_long) #plot in mm/day for ONE MONTH
 
 ####### FINISHES PLOT MAP PER MONTH########
@@ -94,7 +95,7 @@ SumVarDayQuebec = colSums(ValidValuesVar)
 SumVarDayQuebec
 
 plot (SumVarDayQuebec[3:367])
-VecPrecDay <- as.vector(SumVarDayQuebec[3:367])
+VecPrecDay <- as.vector(SumVarDayQuebec[3:33])
 VecPrecDay
 TotalPrecMonth <- sum(VecPrecDay, na.rm = FALSE)
 TotalPrecMonth

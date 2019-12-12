@@ -3,19 +3,37 @@ shinyServer (
     headerPanel("Portraits Climatiques du Québec - MFFP"),
     
     sidebarPanel(
-      selectInput("Distribution", "Séléctionez l'échele:",
-                 choices=c("Normal", "Exponential")),
-      sliderInput("sampleSize", "Séléctionez le scenario:",
-                  min=100, max=5000, value= 1000, step=100),
-      conditionalPanel(condition = "input.Distribution == 'Normal'",
-                       textInput("mean", "Please Select the mean", 10),
-                       textInput("sd", "Please Select Standard Deviation",3)),
-      conditionalPanel(condition = "input.Distribution == 'Exponential'",
-                       textInput("lambda", "Please Select Exponential Lambda:", 1))
+      selectInput("Variable", "Séléctionez la variable climatique:",
+                  choices=c("Températures moyennes, min et max","Précipitations totales et sous forme de neige",
+                            "Degrés-jours de croissance", "Évènements gel-dégel", "Saison de croissance")),
+      selectInput("Echele", "Séléctionez l'échele:",
+                 choices=c("Domaines et sous-domaines bioclimatiques", "Régions et sous-région écologiques", 
+                           "Territoires guides", "Secteurs des opérations régionales",
+                           "Régions forestières", "Unités d’aménagement (UA)")),
+      selectInput("Saisonalite", "Séléctionez la saisonalité:",
+                  choices=c("Annuel", "Saissioniers", "Mensuel" )),
+      conditionalPanel(condition = "input.Saisonalite == 'Saissioniers'",
+                       actionButton("Hiver", "Hiver"),
+                       actionButton("Printemps", "Printemps"),
+                       actionButton("Été", "Été"),
+                       actionButton("Automne", "Automne")),
+      conditionalPanel(condition = "input.Saisonalite == 'Mensuel'",
+                       selectInput("Mois", "Séléctionez le mois:",
+                                   choices=c("Janvier", "Février", "Mars", "Avril","Mai","Juin",
+                                             "Julliet","Aout","Septembre","Octobre","Novembre","Decembre")),
+                       ),
+      numericInput("n", "n", 50),
+      selectInput("Scenario", "Séléctionez le scenario d'émissions:",
+                  choices=c("Modérées (RCP4.5)", "Élevées" )),
+      selectInput("Horizon", "Séléctionez l'horizon de temps:",
+                  choices=c("Historique", "2071-2100", "2041-2070")),
+      sliderInput("Percentile", "Séléctionez le percentile:",
+                  min=10, max=90, value= 50, step=40),
+      
     ),
     
     mainPanel(
-    plotOutput("myPlot")
+  plotOutput("plot")
     )
     
   )

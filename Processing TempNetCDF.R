@@ -15,6 +15,9 @@ library(maps)
 library(raster)
 library(PCICt)
 library(ncdf.tools)
+library(here) 
+library(stringr) 
+library(purrr) 
 
 ###Declaring filanmes and variables to explore####
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ

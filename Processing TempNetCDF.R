@@ -21,6 +21,16 @@ library(purrr)
 
 ###Declaring filanmes and variables to explore####
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
+
+( TempMaxFiles45 = list.files(path = ".",
+                              #pattern = "^tasmax_day_*.nc",
+                              pattern = "^tasmax_day_[A-Za-z1-9-]+_rcp[0-9]+_r1i1p1_na10kgrid_qm-moving-50bins-detrend_[0-9]+[.]nc",
+                              full.names = TRUE,
+                              recursive = TRUE) )
+
+
+
+
 fname <- "tasmin_day_CMCC-CMS_rcp45_r1i1p1_na10kgrid_qm-moving-50bins-detrend_1954.nc"
 RelVar <- "tasmin" #Relevant variable
 

@@ -1,4 +1,4 @@
-####PLOTTING TEMPERATURE MAX RASTER for MANY FILES
+####PLOTTING TEMPERATURE MAX TIME SERIES for MANY FILES
 
 library(readr)
 library(dplyr)
@@ -29,7 +29,7 @@ file.names
 for (i in 1:length(file.names)){
   ncin <- nc_open(file.names[i]) #open netcdf file
   print(ncin)
-  }
+}
 
 RelVar <- "tasmax" #Relevant variable
 

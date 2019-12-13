@@ -46,7 +46,7 @@ lat <- ncvar_get(ncin,"lat")
 nlat <- dim(lat)
 summary (lat)
 
-#Exploring Relevant variable (temp, prec) and time variables
+#Exploring Relevant variable (temp) and time variables
 dunits <- ncatt_get(ncin, RelVar,"units")
 dunits
 tunits <- ncatt_get(ncin,"time","units")
@@ -58,30 +58,6 @@ nt
 ncin$dim$time$units
 ncin$dim$time$calendar
 ####Finishes Exploring and creating varibales#####
-
-
-
-####### STARTS PLOT MAP PER MONTH########
-###Convert into raster
-rasbrick <- brick(fname)
-rasbrick
-PlotVar <- brick(fname, varname=RelVar, layer="time")
-strPlotvar <- str(PlotVar)
-
-
-###Create a time index for the multi-layer objetct
-TIME <- as.POSIXct(substr(PlotVar@data@names, start = 2, stop=20), format="%Y.%m.%d")
-dftime <- data.frame(INDEX = 1:length(TIME), TIME=TIME)
-
-###Create a subset of only the fist month of the year
-subset <- dftime[format(dftime$TIME, "%m") == alist("01","02","03"),] #Selecting 3 months
-subset
-sub.var <- PlotVar[[subset$INDEX]]
-var_vec_long <- calc(sub.var, fun=mean) #mean variable(temp, prec) of the month
-plot(var_vec_long - 273.15) #plot in Celsius for THREE MONTH
-
-####### FINISHES PLOT MAP PER MONTH########
-
 
 ######## STARTS CODE FOR THE TIME SERIES PLOT##########
 # reshape the array into vector

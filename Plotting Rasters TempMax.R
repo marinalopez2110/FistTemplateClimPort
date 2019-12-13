@@ -1,4 +1,4 @@
-####TEMPERATURE ANALYSIS FILE (MAX AND MIN)
+####PLOTTING TEMPERATURE MAX RASTER for MANY FILES
 
 library(readr)
 library(dplyr)

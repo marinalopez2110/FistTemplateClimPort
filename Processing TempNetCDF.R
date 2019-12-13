@@ -21,7 +21,7 @@ library(ncdf.tools)
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
 
 fname <- "tasmin_day_CMCC-CMS_rcp45_r1i1p1_na10kgrid_qm-moving-50bins-detrend_1954.nc"
-RelVar <- "tasmax" #Relevant variable
+RelVar <- "tasmin" #Relevant variable
 
 ncin <- nc_open(fname) #open netcdf file#print(ncin)
 print (ncin)

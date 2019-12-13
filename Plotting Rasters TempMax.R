@@ -15,16 +15,27 @@ library(maps)
 library(raster)
 library(PCICt)
 library(ncdf.tools)
-
+library(here) 
+library(stringr) 
+library(purrr) 
 
 ###Declaring filanmes and variables to explore####
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
+path = "C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos"
 
-fname <- "tasmin_day_CMCC-CMS_rcp45_r1i1p1_na10kgrid_qm-moving-50bins-detrend_1954.nc"
+
+file.names <- dir(path, pattern = "^tasmax_day_[A-Za-z1-9-]+_rcp[0-9]+_r1i1p1_na10kgrid_qm-moving-50bins-detrend_[0-9]+[.]nc")
+file.names
+for (i in 1:length(file.names)){
+  ncin <- nc_open(file.names[i]) #open netcdf file
+  print(ncin)
+}
+
 RelVar <- "tasmax" #Relevant variable
 
-ncin <- nc_open(fname) #open netcdf file#print(ncin)
-print (ncin)
+#ncin <- nc_open(fname) #open netcdf file
+#print(ncin)
+
 
 ######Starts Exploring and creating varibales#####
 ### Longitude and Latitude varibales and dimenssions

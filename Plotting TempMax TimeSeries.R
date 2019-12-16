@@ -29,7 +29,7 @@ file.names
 RelVar <- "tasmax" #Relevant variable
 
 #Loop to open all the netncd files of the variable that we care>
-var_array1 <- array(0, dim=c(1064,700,1096))
+var_array1 <- array(0, dim=c(1064,700,1095))
 time1 <- c()
 k=1
 for (i in 1:length(file.names)){
@@ -77,8 +77,8 @@ dunits
 tunits <- ncatt_get(ncin,"time","units")
 tunits
 time <- ncvar_get(ncin,"time")
-time
-nt <- dim(time)
+time1
+nt <- length(time1)
 nt
 ncin$dim$time$units
 ncin$dim$time$calendar
@@ -92,7 +92,7 @@ as.Date("1950-01-01") + 25915
 
 ######## STARTS CODE FOR THE TIME SERIES PLOT##########
 # reshape the array into vector
-var_array <- ncvar_get(ncin,RelVar)
+#var_array <- ncvar_get(ncin,RelVar)
 dim(var_array1)
 var_vec_long <- as.vector(var_array1)
 length(var_vec_long)

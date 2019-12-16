@@ -105,8 +105,9 @@ head(na.omit(var_mat))
 # create a dataframe
 lonlat <- as.matrix(expand.grid(lon,lat))
 var_df02 <- data.frame(cbind(lonlat,var_mat))
-names(var_df02) <- c("lon","lat","Jan01","Jan02","Jan03","Jan04","Jan05","Jan06",
-                     "Jan07","Jan08","Jan09","Jan10","Jan11","Jan12")
+names(var_df02) <- c("lon","lat")
+names(var_df02[3:(j+2)]) <- format(as.Date(as.numeric(time1), origin = "1950-01-01"))
+time2 <- as.Date(as.numeric(time1), origin = "1950-01-01")
 # Omit Invalid Values
 head(na.omit(var_df02))
 ValidValuesVar = na.omit(var_df02)
@@ -116,7 +117,13 @@ ValidValuesVar
 MeanVarDayQuebec = colMeans(ValidValuesVar) - 273.15
 MeanVarDayQuebec
 
-plot (MeanVarDayQuebec[3:j+2])
+plot (time2, MeanVarDayQuebec[3:(j+2)],
+      main="Moyenne des température maximales quotidiennes (°C) ",
+      xlab = "Année",
+      ylab="Température (°C)",
+      col= "red")
+
+
 ####### FINISHES CODE FOR TIME SERIES ############################
 
 nc_close(ncin) # Close netcdf file

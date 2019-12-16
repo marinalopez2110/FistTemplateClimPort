@@ -23,9 +23,11 @@ library(purrr)
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
 path = "C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos"
 
-
+#REGEX to find all files starting with the relevant vairable, any model, any rcp and any year:
 file.names <- dir(path, pattern = "^tasmax_day_[A-Za-z1-9-]+_rcp[0-9]+_r1i1p1_na10kgrid_qm-moving-50bins-detrend_[0-9]+[.]nc")
 file.names
+
+#Loop to open all the netncd files of the variable that we care>
 for (i in 1:length(file.names)){
   ncin <- nc_open(file.names[i]) #open netcdf file
   print(ncin)

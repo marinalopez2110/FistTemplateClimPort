@@ -33,9 +33,6 @@ for (i in 1:length(file.names)){
 
 RelVar <- "tasmax" #Relevant variable
 
-#ncin <- nc_open(fname) #open netcdf file
-#print(ncin)
-
 
 ######Starts Exploring and creating varibales#####
 ### Longitude and Latitude varibales and dimenssions
@@ -57,6 +54,12 @@ nt <- dim(time)
 nt
 ncin$dim$time$units
 ncin$dim$time$calendar
+
+
+###NOTE - checking date - not correct, this gives 14-dec-2020 instead of 01-Jan2021. All the leap years missing
+as.Date("1950-01-01") + 25915
+
+
 ####Finishes Exploring and creating varibales#####
 
 ######## STARTS CODE FOR THE TIME SERIES PLOT##########
@@ -68,7 +71,6 @@ length(var_vec_long)
 # reshape the vector into a matrix
 var_mat <- matrix(var_vec_long, nrow=nlon*nlat, ncol=nt)
 dim(var_mat)
-
 head(na.omit(var_mat))
 
 # create a dataframe

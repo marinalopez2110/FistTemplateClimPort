@@ -116,7 +116,7 @@ ValidValuesVar
 MeanVarDayQuebec = colMeans(ValidValuesVar) - 273.15
 MeanVarDayQuebec
 
-plot (MeanVarDayQuebec[3:367])
+plot (MeanVarDayQuebec[3:j+2])
 ####### FINISHES CODE FOR TIME SERIES ############################
 
 nc_close(ncin) # Close netcdf file

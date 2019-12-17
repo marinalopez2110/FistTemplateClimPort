@@ -88,9 +88,10 @@ ncin$dim$time$calendar
 ###DEALING WITH MISSING DAYS OF LEAP YEARS
 as.Date("1950-01-01") + 25915
 
-years <- 1895:2005
+years <- 1950:2022
 lyears <- years[leap_year(years)]
-lengthyears <- lenght(lyears)
+lyears
+lengthyears <- length(lyears)
 
 
 

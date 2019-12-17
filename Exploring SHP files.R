@@ -11,7 +11,7 @@ library(shapefiles)
 
 #1 readShapePoly of the package maptools
 x <- CRS("+proj=longlat +ellps=WGS84")
-pa1 = readShapePoly("territoire_guide", verbose = TRUE, proj4string = x) 
+pa1 = readShapePoly("DOM_BIO", verbose = TRUE, proj4string = x) 
 plot(pa1)
 pa1
 
@@ -30,21 +30,35 @@ plot(pa3)
 pa1
 extent(pa1) #show max and min
 
-names(pa1) #not much info in this case
+names(pa1) #shows the columns in the vector
 
-head(pa1@data) #not much info in this case
+head(pa1@data) #show a table of some of the data in the vector
 
-str(pa1@data)
+str(pa1@data) #shows the type of data in every column
 
-print(pa1$TER_GUIDE) #this case only has one attribute
+print(pa1$NOM) #Show all data in the column of the vector
 
-"1a" %in% pa1$TER_GUIDE #Only gives TRUE
+"SapiniŠre … bouleau blanc" %in% pa1$NOM
 
-summary(pa1@data) #not much info in this case - 25 attributes
+summary(pa1@data) #show statistics of the data by column
 
-summary(pa1@data$TER_GUIDE)  #not much info in this case - 25 attributes
+summary(pa1@data$NOM)  #gives more info about that particular column
+summary(pa1@data$DOM_BIO)
+tablepa1 = table(pa1@data$DOM_BIO) #same a summary but with valid values
+tablepa1
 
-#iucn = table(pa1@data@) #there is no data for this funciont
+mean(pa1@data$SUPERFICIE) #Gives the mena of the column
 
-#mean(pa1@data$TER_GUIDE) #there is no data for this funciont
+#####SIMPLE VISUALIZATIONS
+
+library(rworldmap)
+
+wn = getMap(resolution = "coarse")
+plot("wn")
+
+data(wrld_simpl, package = "maptools")
+plot(wrld_simpl, add=T)
+
+Quebec= readOGR(dsn = ".", layer = "DOM_BIO")
+plot(Quebec, add=T, col="#f2f2f2", bg="skyblue", axes=TRUE, border="red")
 

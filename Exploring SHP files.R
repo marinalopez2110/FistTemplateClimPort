@@ -44,4 +44,7 @@ summary(pa1@data) #not much info in this case - 25 attributes
 
 summary(pa1@data$TER_GUIDE)  #not much info in this case - 25 attributes
 
+#iucn = table(pa1@data@) #there is no data for this funciont
+
+#mean(pa1@data$TER_GUIDE) #there is no data for this funciont
 

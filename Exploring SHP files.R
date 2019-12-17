@@ -25,3 +25,23 @@ plot(pa3)
 
 #palutm <- spTransform(pa1, CRS("+proj=utm +zone=21 +ellps=WGS84")) #Gives error Error in .spTransform_Polygon(input[[i]], to_args = to_args, from_args = from_args,
 #Quebec zone between 17 and 21
+
+#EXPLORE SHAPEFILES ATTRIBUTES
+pa1
+extent(pa1) #show max and min
+
+names(pa1) #not much info in this case
+
+head(pa1@data) #not much info in this case
+
+str(pa1@data)
+
+print(pa1$TER_GUIDE) #this case only has one attribute
+
+"1a" %in% pa1$TER_GUIDE #Only gives TRUE
+
+summary(pa1@data) #not much info in this case - 25 attributes
+
+summary(pa1@data$TER_GUIDE)  #not much info in this case - 25 attributes
+
+

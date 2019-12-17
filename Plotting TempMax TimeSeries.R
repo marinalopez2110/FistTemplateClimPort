@@ -18,6 +18,7 @@ library(ncdf.tools)
 library(here) 
 library(stringr) 
 library(purrr) 
+library(lubridate)
 
 ###Declaring filanmes and variables to explore####
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
@@ -84,8 +85,13 @@ ncin$dim$time$units
 ncin$dim$time$calendar
 
 
-###NOTE - checking date - not correct, this gives 14-dec-2020 instead of 01-Jan2021. All the leap years missing
+###DEALING WITH MISSING DAYS OF LEAP YEARS
 as.Date("1950-01-01") + 25915
+
+years <- 1895:2005
+lyears <- years[leap_year(years)]
+lengthyears <- lenght(lyears)
+
 
 
 ####Finishes Exploring and creating varibales#####

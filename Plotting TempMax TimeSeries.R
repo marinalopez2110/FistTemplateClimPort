@@ -19,8 +19,11 @@ library(purrr)
 library(lubridate)
 
 ###Declaring filanmes and variables to explore####
-setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
-path = "C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos"
+#setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
+#path = "C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos" #TELUQ
+
+setwd("/home/mlopez/EXEC/Data/Partial/") #Doris
+path = "/home/mlopez/EXEC/Data/Partial/" #Doris
 
 #REGEX to find all files starting with the relevant vairable, any model, any rcp and any year:
 file.names <- dir(path, pattern = "^tasmax_day_[A-Za-z1-9-]+_rcp[0-9]+_r1i1p1_na10kgrid_qm-moving-50bins-detrend_[0-9]+[.]nc")

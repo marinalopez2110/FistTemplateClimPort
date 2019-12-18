@@ -51,14 +51,18 @@ mean(pa1@data$SUPERFICIE) #Gives the mena of the column
 
 #####SIMPLE VISUALIZATIONS
 
-library(rworldmap)
-
-wn = getMap(resolution = "coarse")
-plot("wn")
-
-data(wrld_simpl, package = "maptools")
-plot(wrld_simpl, add=T)
 
 Quebec= readOGR(dsn = ".", layer = "DOM_BIO")
 plot(Quebec, add=T, col="#f2f2f2", bg="skyblue", axes=TRUE, border="red")
 
+zone5 = subset(pa1, pa1$DOM_BIO=="5")
+plot(zone5, col="blue")
+
+####BASIC ANALYSIS
+
+#area of the map
+library(rgeos)
+gArea(Quebec)
+
+#Area in Km
+gArea(Quebec)*110*110

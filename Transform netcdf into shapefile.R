@@ -18,6 +18,7 @@ library(PCICt)
 
 ###Declaring filanmes and variables to explore####
 setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
+setwd("/home/mlopez/EXEC/Data/") #Doris
 
 fname <- "tasmin_day_CMCC-CMS_rcp45_r1i1p1_na10kgrid_qm-moving-50bins-detrend_1954.nc"
 RelVar <- "tasmin" #Relevant variable

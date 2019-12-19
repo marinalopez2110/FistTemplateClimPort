@@ -108,16 +108,16 @@ length(var_vec_long)
 # reshape the vector into a matrix
 var_mat <- matrix(var_vec_long, nrow=nlon*nlat, ncol=nt)
 dim(var_mat)
-head(na.omit(var_mat))
+#head(na.omit(var_mat)) #Takes very long, Only do if really need to check it
 
 # create a dataframe
 lonlat <- as.matrix(expand.grid(lon,lat))
 var_df02 <- data.frame(cbind(lonlat,var_mat))
 names(var_df02) <- c("lon","lat")
-names(var_df02[3:(j+2)]) <- format(as.Date(as.numeric(time1), origin = "1950-01-01"))
+#names(var_df02[3:(j+2)]) <- format(as.Date(as.numeric(time1), origin = "1950-01-01")) #Doesn't really work
 time2 <- as.Date(as.numeric(time1), origin = "1950-01-01")
 # Omit Invalid Values
-head(na.omit(var_df02))
+head(na.omit(var_df02)) #Takes very long, Only do if really need to check it
 ValidValuesVar = na.omit(var_df02)
 ValidValuesVar
 
@@ -131,7 +131,7 @@ plot (time2, MeanVarDayQuebec[3:(j+2)],
       ylab="Température (°C)",
       col= "red")
 
-
+write.csv(ValidValuesVar,"/home/mlopez/EXEC/Data/Partial/TemperatureMaxQC.csv")
 ####### FINISHES CODE FOR TIME SERIES ############################
 
 nc_close(ncin) # Close netcdf file

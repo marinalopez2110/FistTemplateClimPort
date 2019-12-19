@@ -14,7 +14,6 @@ library(ncdf4)
 library(maps)
 library(raster)
 library(PCICt)
-library(ncdf.tools)
 
 
 ###Declaring filanmes and variables to explore####

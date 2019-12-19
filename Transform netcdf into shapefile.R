@@ -71,6 +71,25 @@ plot(var_vec_long - 273.15) #plot in Celsius for THREE MONTH
 
 ####### FINISHES PLOT MAP PER MONTH########
 
+#######TO CREATE SHAPEFILE
+rasbrick[[1]] #day 1
+plot(rasbrick[[1]]) # plot the firs tday
+graphics.off() #cleans all plots
+r <- raster(rasbrick, layer=1) # Select which data is needed to be saved
+r
+#
+class(r)
+plot(r,axes=T)
+#
+# Use this function "gdal_polygonizeR" for ploygonize big data. It's faster than raster package function.
+# https://johnbaumgartner.wordpress.com/2012/07/26/getting-rasters-into-shape-from-r/
+# system.time(p <- gdal_polygonizeR(r))
+p <- rasterToPolygons(r, dissolve=TRUE)
+p
+plot(p,axes=T)
+# Save as shapefile
+writeOGR(p, dsn="C:\\Users\\mlopez\\Documents\\GitHub\\Images", layer='tos_O1_2001_2002', driver="ESRI Shapefile", overwrite_layer=T)
+
 
 
 

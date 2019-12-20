@@ -120,7 +120,8 @@ time2 <- as.Date(as.numeric(time1), origin = "1950-01-01")
 head(na.omit(var_df02)) #Takes very long, Only do if really need to check it
 ValidValuesVar = na.omit(var_df02)
 ValidValuesVar
-
+TempMax1day = ValidValuesVar[1:3]
+TempMax1day
 #get the mean of every column for ValidValuesVar, so we have the mean variable of every day in all locations
 MeanVarDayQuebec = colMeans(ValidValuesVar) - 273.15
 MeanVarDayQuebec
@@ -131,7 +132,7 @@ plot (time2, MeanVarDayQuebec[3:(j+2)],
       ylab="Température (°C)",
       col= "red")
 
-write.csv(ValidValuesVar,"/home/mlopez/EXEC/Data/Partial/TemperatureMaxQC.csv")
+write.csv(TempMax1day,"/home/mlopez/EXEC/Data/Partial/TemperatureMaxQC2.csv")
 ####### FINISHES CODE FOR TIME SERIES ############################
 
 nc_close(ncin) # Close netcdf file

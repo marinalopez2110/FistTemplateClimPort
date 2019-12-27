@@ -14,14 +14,15 @@ library(ncdf4)
 library(maps)
 library(raster)
 library(PCICt)
-library(ncdf.tools)
-library(here) 
 library(stringr) 
 library(purrr) 
 
 ###Declaring filanmes and variables to explore####
-setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
-path = "C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos"
+#setwd("C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos") #TELUQ
+#path = "C:\\Users\\mlopez\\Documents\\GitHub\\Data Ouranos"
+
+setwd("/home/mlopez/EXEC/Data/Partial/") #Doris
+path = "/home/mlopez/EXEC/Data/Partial/" #Doris
 
 
 file.names <- dir(path, pattern = "^tasmax_day_[A-Za-z1-9-]+_rcp[0-9]+_r1i1p1_na10kgrid_qm-moving-50bins-detrend_[0-9]+[.]nc")

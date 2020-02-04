@@ -81,3 +81,25 @@ def latlon_regions(path_filename_shapefile):
     latlon_res = gpd.sjoin(latlon_df, shape, op="within")
     return latlon_res
 
+
+def data_to_points(path):
+    
+    # Path to files
+    files = list(glob.glob(os.path.join(path,'*.*')))
+    datasets = [xr.open_dataset(f) for f in files]
+    latlon_df_0 = pd.concat(pd.DataFrame(itertools.product(ds.lat.values, ds.lon.values), columns=["lat","lon"]) 
+                            for ds in datasets).drop_duplicates(["lat","lon"])
+    latlon_df = gpd.GeoDataFrame(latlon_df_0)
+    latlon_df["geometry"] = [Point(lon, lat) for (lat,lon) in zip(latlon_df.lat, latlon_df.lon)]
+    return latlon_df
+
+### Make grid to clip non-processed data into regions
+def make_grid(grid, path_filename_shapefile):
+    shapefile = pathlib.Path(path_filename_shapefile)
+    shape = gpd.read_file(shapefile)
+    #Reading Shapefiles in right coordinate system
+    shape = shape.to_crs({'init': 'epsg:4326'})
+    #dfpolyclip = gpd.sjoin(grid, shape, op="intersects")
+    dfpolyclip = gpd.overlay(grid, shape, how="intersection")
+    return dfpolyclip
+

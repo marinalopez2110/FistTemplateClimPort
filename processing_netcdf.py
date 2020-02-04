@@ -25,7 +25,7 @@ def load_as_df(filename):
     return df
 
 
-#### Get data from the 11 models by periods 
+#### Get data from the 11 models by periods . temp = tg_mean, tmax or tmin. Returns a tupple
 def dft_map_models_periods(filename, temp):
     #Convert NetCDF into a dataframe
     df = load_as_df(filename)
@@ -53,19 +53,31 @@ def dft_map_models_periods(filename, temp):
     df2080 = df2080.reset_index()
     return (df_h, df2050, df2080)
 
-    
-#### Clipping by region    
-def clip_by_reg(shapefile, dft):
-    latlon_df = pcdf.latlon_regions(shapefile)
-    dft.set_index(["lat","lon"])
-    latlon_df.set_index(["lat","lon"])
-    dfclip = pd.merge(dft, latlon_df, on=["lat","lon"])
-    return (dfclip)
-    
 
-### Getting mask to clip non-processed data into regions
-def latlon_regions(path_filename_shapefile):
+### Converts 11 (in path) models from lat,lon to GeoDF with gemetry points
+def data_to_points(path):
     
+    # Path to files
+    files = list(glob.glob(os.path.join(path,'*.*')))
+    datasets = [xr.open_dataset(f) for f in files]
+    latlon_df_0 = pd.concat(pd.DataFrame(itertools.product(ds.lat.values, ds.lon.values), columns=["lat","lon"]) 
+                            for ds in datasets).drop_duplicates(["lat","lon"])
+    latlon_df = gpd.GeoDataFrame(latlon_df_0)
+    latlon_df["geometry"] = [Point(lon, lat) for (lat,lon) in zip(latlon_df.lat, latlon_df.lon)]
+    return latlon_df
+
+### Makes grid (polygons) to clip non-processed data into regions
+def make_grid(grid, path_filename_shapefile):
+    shapefile = pathlib.Path(path_filename_shapefile)
+    shape = gpd.read_file(shapefile)
+    #Reading Shapefiles in right coordinate system
+    shape = shape.to_crs({'init': 'epsg:4326'})
+    #dfpolyclip = gpd.sjoin(grid, shape, op="intersects")
+    dfpolyclip = gpd.overlay(grid, shape, how="intersection")
+    return dfpolyclip
+
+### Getting mask to clip non-processed data into regions with points geometry only
+def latlon_regions(path_filename_shapefile):
     # Path to files
     path = "/home/mlopez/EXEC/Tg_annual_11_models/"
     json = pathlib.Path(path_filename_shapefile)
@@ -81,25 +93,10 @@ def latlon_regions(path_filename_shapefile):
     latlon_res = gpd.sjoin(latlon_df, shape, op="within")
     return latlon_res
 
-
-def data_to_points(path):
-    
-    # Path to files
-    files = list(glob.glob(os.path.join(path,'*.*')))
-    datasets = [xr.open_dataset(f) for f in files]
-    latlon_df_0 = pd.concat(pd.DataFrame(itertools.product(ds.lat.values, ds.lon.values), columns=["lat","lon"]) 
-                            for ds in datasets).drop_duplicates(["lat","lon"])
-    latlon_df = gpd.GeoDataFrame(latlon_df_0)
-    latlon_df["geometry"] = [Point(lon, lat) for (lat,lon) in zip(latlon_df.lat, latlon_df.lon)]
-    return latlon_df
-
-### Make grid to clip non-processed data into regions
-def make_grid(grid, path_filename_shapefile):
-    shapefile = pathlib.Path(path_filename_shapefile)
-    shape = gpd.read_file(shapefile)
-    #Reading Shapefiles in right coordinate system
-    shape = shape.to_crs({'init': 'epsg:4326'})
-    #dfpolyclip = gpd.sjoin(grid, shape, op="intersects")
-    dfpolyclip = gpd.overlay(grid, shape, how="intersection")
-    return dfpolyclip
-
+#### Clipping by region to plot static images   
+def clip_by_reg(shapefile, dft):
+    latlon_df = pcdf.latlon_regions(shapefile)
+    dft.set_index(["lat","lon"])
+    latlon_df.set_index(["lat","lon"])
+    dfclip = pd.merge(dft, latlon_df, on=["lat","lon"])
+    return (dfclip)

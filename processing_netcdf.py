@@ -13,6 +13,7 @@ import os
 import glob
 import itertools
 import processing_netcdf as pcdf
+from shapely import geometry as gmty
 
 
 #Load NETCDF as dataframe
@@ -66,6 +67,20 @@ def data_to_points(path):
     latlon_df["geometry"] = [Point(lon, lat) for (lat,lon) in zip(latlon_df.lat, latlon_df.lon)]
     return latlon_df
 
+### Converts points into polygons
+def process_points_poly(dfpoints):
+    arr = dfpoints.lon.unique()
+    arr.sort()
+    dlon = np.diff(arr)[0] / 2
+    arr = dfpoints.lat.unique()
+    arr.sort()
+    dlat = np.diff(arr)[0] / 2
+    (dlon, dlat)
+    dfpoints.geometry = [gmty.Polygon([[lon-dlon, lat-dlat], [lon+dlon, lat-dlat], [lon+dlon, lat+dlat],
+                                       [lon-dlon, lat+dlat]]) 
+                         for (lat, lon) in zip(dfpoints.lat, dfpoints.lon)]
+    return dfpoints.geometry
+
 ### Makes grid (polygons) to clip non-processed data into regions
 def make_grid(grid, path_filename_shapefile):
     shapefile = pathlib.Path(path_filename_shapefile)
@@ -75,6 +90,21 @@ def make_grid(grid, path_filename_shapefile):
     #dfpolyclip = gpd.sjoin(grid, shape, op="intersects")
     dfpolyclip = gpd.overlay(grid, shape, how="intersection")
     return dfpolyclip
+
+
+### Procesing periods to merge with data
+def proc_period(tuplen, period):
+    #Extract df from tuple
+    dfp = pd.DataFrame.from_records(tuplen[period], columns= ["time", "lat", "lon", "tg_mean"] )
+    dfp = dfp.reset_index()
+    dfp.set_index(["lat","lon"])
+    return(dfp)
+
+
+
+
+
+
 
 ### Getting mask to clip non-processed data into regions with points geometry only
 def latlon_regions(path_filename_shapefile):

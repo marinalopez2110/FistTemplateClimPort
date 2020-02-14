@@ -16,6 +16,17 @@ import processing_netcdf as pcdf
 from shapely import geometry as gmty
 
 
+#Load NETCDF as dataframe and return with model and percentile columns
+def load_as_df(filename):
+    ds = xr.open_dataset(filename)
+    index = ds.indexes['time']
+    if index.dtype != "<M8[ns]":
+        ds['time'] = index.to_datetimeindex()
+    df = ds.to_dataframe().dropna()
+    return df
+
+
+
 #Load NETCDF as dataframe
 def load_as_df(filename):
     ds = xr.open_dataset(filename)
@@ -56,11 +67,22 @@ def dft_map_models_periods(filename, temp):
 
 
 ### Converts 11 (in path) models from lat,lon to GeoDF with gemetry points
-def data_to_points(path):
+def data_to_points(path, variable):
     
     # Path to files
-    files = list(glob.glob(os.path.join(path,'*.*')))
+    files = list(glob.glob(os.path.join(path,variable)))
     datasets = [xr.open_dataset(f) for f in files]
+    latlon_df_0 = pd.concat(pd.DataFrame(itertools.product(ds.lat.values, ds.lon.values), columns=["lat","lon"]) 
+                            for ds in datasets).drop_duplicates(["lat","lon"])
+    latlon_df = gpd.GeoDataFrame(latlon_df_0)
+    latlon_df["geometry"] = [Point(lon, lat) for (lat,lon) in zip(latlon_df.lat, latlon_df.lon)]
+    return latlon_df
+
+### Converts 1 file from lat,lon to GeoDF with gemetry points
+def dataf_to_points(file):
+    
+    # Path to files
+    datasets = xr.open_dataset(file)
     latlon_df_0 = pd.concat(pd.DataFrame(itertools.product(ds.lat.values, ds.lon.values), columns=["lat","lon"]) 
                             for ds in datasets).drop_duplicates(["lat","lon"])
     latlon_df = gpd.GeoDataFrame(latlon_df_0)

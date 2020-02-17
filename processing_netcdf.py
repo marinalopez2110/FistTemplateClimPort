@@ -106,9 +106,9 @@ def process_points_poly(dfpoints):
 ### Makes grid (polygons) to clip non-processed data into regions
 def make_grid(grid, path_filename_shapefile):
     shapefile = pathlib.Path(path_filename_shapefile)
-    shape = gpd.read_file(shapefile)
+    shape0 = gpd.read_file(shapefile)
     #Reading Shapefiles in right coordinate system
-    shape = shape.to_crs({'init': 'epsg:4326'})
+    shape = shape0[shape0.geometry.type == 'Polygon'].to_crs({'init': 'epsg:4326'})
     #dfpolyclip = gpd.sjoin(grid, shape, op="intersects")
     dfpolyclip = gpd.overlay(grid, shape, how="intersection")
     return dfpolyclip
